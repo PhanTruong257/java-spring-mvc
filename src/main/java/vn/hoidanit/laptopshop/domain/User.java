@@ -56,4 +56,10 @@ public class User {
         this.phone = phone;
     }
 
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", email=" + email + ", password=" + password + ", fullName=" + fullName
+                + ", address=" + address + ", phone=" + phone + "]";
+    }
+
 }
