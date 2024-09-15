@@ -1,6 +1,7 @@
 package vn.hoidanit.laptopshop.service;
 
 import org.springframework.stereotype.Service;
+import java.util.*;
 
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.repository.UserRepository;
@@ -13,9 +14,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public String handleHello() {
+    public List<User> getAllUsers() {
+        return this.userRepository.findAll();
+    }
 
-        return "Hello from service";
+    public List<User> getAllUsersByEmail(String email) {
+        return this.userRepository.findByEmail(email);
     }
 
     public User handleSaveUser(User user) {
@@ -23,4 +27,14 @@ public class UserService {
         System.out.println(eric);
         return eric;
     }
+
+    public User getUserById(long id) {
+        User user = userRepository.findById(id);
+        return user;
+    }
+
+    public void deleteUserById(long id) {
+        this.userRepository.deleteById(id);
+    }
+
 }

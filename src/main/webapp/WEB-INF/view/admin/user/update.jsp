@@ -17,26 +17,23 @@
                 <link href="/css/demo.css" rel="stylesheet">
             </head>
 
-
-
-
-
             <body>
                 <div class="container mt-5">
                     <div class="row">
                         <div class="col-md-6 col-12 mx-auto">
-                            <h3>Create a user</h3>
+                            <h3>Update id = ${newUser.id}</h3>
+
                             <hr />
-                            <form:form method="post" action="/admin/user/create" modelAttribute="newUser">
+                            <form:form method="post" action="/admin/user/update" modelAttribute="newUser">
+                                <div class="mb-3" style="display: none;">
+                                    <label for="exampleInputEmail1" class="form-label">id:</label>
+                                    <form:input type="text" class="form-control" path="id" />
+                                </div>
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1" class="form-label">Email address:</label>
                                     <form:input type="email" class="form-control" path="email" />
                                 </div>
 
-                                <div class="mb-3">
-                                    <label for="exampleInputPassword1" class="form-label">Password:</label>
-                                    <form:input type="password" class="form-control" path="password" />
-                                </div>
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1" class="form-label">Phone number:</label>
                                     <form:input type="text" class="form-control" path="phone" />
@@ -49,10 +46,8 @@
                                 <div class="mb-3">
                                     <label for="exampleInputEmail1" class="form-label">Address:</label>
                                     <form:input type="text" class="form-control" path="address" />
-
                                 </div>
-
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary">Update</button>
                             </form:form>
                         </div>
 
