@@ -1,21 +1,23 @@
 package vn.hoidanit.laptopshop.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
-import java.util.*;
 
 import vn.hoidanit.laptopshop.domain.Role;
 import vn.hoidanit.laptopshop.domain.User;
-import vn.hoidanit.laptopshop.repository.UserRepository;
 import vn.hoidanit.laptopshop.repository.RoleRepository;
+import vn.hoidanit.laptopshop.repository.UserRepository;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final RoleRepository RoleRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, RoleRepository RoleRepository) {
+    public UserService(UserRepository userRepository,
+            RoleRepository roleRepository) {
         this.userRepository = userRepository;
-        this.RoleRepository = RoleRepository;
+        this.roleRepository = roleRepository;
     }
 
     public List<User> getAllUsers() {
@@ -23,7 +25,7 @@ public class UserService {
     }
 
     public List<User> getAllUsersByEmail(String email) {
-        return this.userRepository.findByEmail(email);
+        return this.userRepository.findOneByEmail(email);
     }
 
     public User handleSaveUser(User user) {
@@ -33,16 +35,15 @@ public class UserService {
     }
 
     public User getUserById(long id) {
-        User user = userRepository.findById(id);
-        return user;
+        return this.userRepository.findById(id);
     }
 
-    public void deleteUserById(long id) {
+    public void deleteAUser(long id) {
         this.userRepository.deleteById(id);
     }
 
     public Role getRoleByName(String name) {
-        return this.RoleRepository.findByName(name);
+        return this.roleRepository.findByName(name);
     }
 
 }

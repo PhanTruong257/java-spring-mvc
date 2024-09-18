@@ -1,19 +1,17 @@
 package vn.hoidanit.laptopshop.controller.admin;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.servlet.ServletContext;
+import jakarta.validation.Valid;
 import vn.hoidanit.laptopshop.domain.User;
 import vn.hoidanit.laptopshop.service.UploadService;
 import vn.hoidanit.laptopshop.service.UserService;
@@ -27,11 +25,11 @@ public class UserController {
 
     public UserController(
             UploadService uploadService,
-            UserService userService, PasswordEncoder passwordEncoder) {
+            UserService userService,
+            PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.uploadService = uploadService;
         this.passwordEncoder = passwordEncoder;
-
     }
 
     @RequestMapping("/")
@@ -67,16 +65,23 @@ public class UserController {
 
     @PostMapping(value = "/admin/user/create")
     public String createUserPage(Model model,
-            @ModelAttribute("newUser") User hoidanit,
+            @ModelAttribute("newUser") @Valid User hoidanit, BindingResult newUserBindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
-        String hashPassword = this.passwordEncoder.encode(hoidanit.getPassword());
+        List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(error.getField() + "-" + error.getDefaultMessage());
+        }
+        if (newUserBindingResult.hasErrors()) {
+            return "/admin/user/create";
+        }
 
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
+        String hashPassword = this.passwordEncoder.encode(hoidanit.getPassword());
 
         hoidanit.setAvatar(avatar);
         hoidanit.setPassword(hashPassword);
-        // save role
         hoidanit.setRole(this.userService.getRoleByName(hoidanit.getRole().getName()));
+        // save
         this.userService.handleSaveUser(hoidanit);
         return "redirect:/admin/user";
     }
@@ -113,7 +118,7 @@ public class UserController {
 
     @PostMapping("/admin/user/delete")
     public String postDeleteUser(Model model, @ModelAttribute("newUser") User eric) {
-        this.userService.deleteUserById(eric.getId());
+        this.userService.deleteAUser(eric.getId());
         return "redirect:/admin/user";
     }
 }
