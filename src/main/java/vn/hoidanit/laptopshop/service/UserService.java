@@ -1,11 +1,13 @@
 package vn.hoidanit.laptopshop.service;
 
+import java.rmi.registry.Registry;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.laptopshop.domain.Role;
 import vn.hoidanit.laptopshop.domain.User;
+import vn.hoidanit.laptopshop.domain.dto.RegisterDTO;
 import vn.hoidanit.laptopshop.repository.RoleRepository;
 import vn.hoidanit.laptopshop.repository.UserRepository;
 
@@ -46,4 +48,9 @@ public class UserService {
         return this.roleRepository.findByName(name);
     }
 
+    public User registerDTOtoUser(RegisterDTO registerDTO) {
+        User user = new User();
+        user.setFullName(registerDTO.getFirstName() + " " + registerDTO.getLastName());
+        return user;
+    }
 }

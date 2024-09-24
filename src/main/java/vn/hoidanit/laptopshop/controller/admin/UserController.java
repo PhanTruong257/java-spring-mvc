@@ -1,6 +1,5 @@
 package vn.hoidanit.laptopshop.controller.admin;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,16 +64,22 @@ public class UserController {
 
     @PostMapping(value = "/admin/user/create")
     public String createUserPage(Model model,
-            @ModelAttribute("newUser") @Valid User hoidanit, BindingResult newUserBindingResult,
+            @ModelAttribute("newUser") @Valid User hoidanit,
+            BindingResult newUserBindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
-        List<FieldError> errors = newUserBindingResult.getFieldErrors();
-        for (FieldError error : errors) {
-            System.out.println(error.getField() + "-" + error.getDefaultMessage());
-        }
+
+        // List<FieldError> errors = newUserBindingResult.getFieldErrors();
+        // for (FieldError error : errors) {
+        // System.out.println(">>>>" + error.getField() + " - " +
+        // error.getDefaultMessage());
+        // }
+
+        // validate
         if (newUserBindingResult.hasErrors()) {
-            return "/admin/user/create";
+            return "admin/user/create";
         }
 
+        //
         String avatar = this.uploadService.handleSaveUploadFile(file, "avatar");
         String hashPassword = this.passwordEncoder.encode(hoidanit.getPassword());
 
